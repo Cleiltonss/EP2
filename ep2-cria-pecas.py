@@ -1,4 +1,4 @@
-from random import shuffle, randint 
+from random import shuffle
 def cria_pecas():
     lista_pecas = []
     dentro_lista = []

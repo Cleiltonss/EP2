@@ -5,36 +5,67 @@ from ep2_possiveis_posicoes import posicoes_possiveis
 from ep2_quem_ganhou import verifica_ganhador
 from ep2_soma_pecas import soma_pecas
 from random import randint
-from time import sleep
+from time import sleep, strftime
 
-lista_pecas = cria_pecas() #peças criadas
-n_jogadores = int(input('Qual o número de jogadores [2/3/4 jogadores]? '))
-print('-=' * 40)
-print(f'Agora que foram escolhidos os {n_jogadores} jogadores, podemos começar o jogo!')
-sleep(2)
-print('Divirta-se! :)')
-sleep(2)
-print('-=' * 40)
+inicia = input('Quer iniciar um jogo? (sim/não)')
 sleep(1)
-dic_jmm = inicia_jogo(n_jogadores, lista_pecas) #dicionario com jogador, monte e peças
+while inicia != 'não':
+    lista_pecas = cria_pecas() #peças criadas
+    n_jogadores = int(input('Qual o número de jogadores [2/3/4 jogadores]? '))
+    print('-=' * 40)
+    print(f'Agora que foram escolhidos os {n_jogadores} jogadores, podemos começar o jogo!')
+    sleep(1)
+    print('Divirta-se! :)')
+    sleep(1)
+    print('-=' * 40)
+    sleep(1)
 
 
-#Início do Jogo
-jogador_inicial = randint(0, n_jogadores - 1)
-i = 0
-while i < n_jogadores: 
-    if jogador_inicial == 0:
-        for jmm, dic_jogadores in dic_jmm.items(): #jmm são os jogadores, monte e mesa, respectivamente.
-            if jmm == 'jogadores':
-                for numero_jogador, pecas in dic_jogadores.items():
-                    if numero_jogador == jogador_inicial:
-                        escolha_peca = int(input(f'É a vez do jogador {jogador_inicial}.\nPor favor, escolha uma peça dentre suas 7: {pecas}')) 
-                        
-    else:
-        for jmm, dic_jogadores in dic_jmm.items(): #jmm são os jogadores, monte e mesa, respectivamente.
-            if jmm == 'jogadores':
-                for numero_jogador, pecas in dic_jogadores.items():
-                    if numero_jogador == jogador_inicial:
-                        escolha_peca = randint(0, 6)
-    i += 1 
+    #Início do Jogo
+    dic_jmm = inicia_jogo(n_jogadores, lista_pecas) #dicionario com jogador, monte e peças
+    jogador_inicial = randint(0, n_jogadores - 1)
+    jogador = jogador_inicial
+    jogo_fim = False
+    joga_peca = 0
+    mao = dic_jmm['jogadores']#retorna um dic de keys '0' a '3'
+    mesa = dic_jmm['mesa']#retorna uma lista cheia ou vazia
+    monte = dic_jmm['monte']#retorna uma lista vazia
+    while jogo_fim != True:
+        if jogador == 0:
+            print('Jogador: Você com {} peça(s)'.format(len(mao[jogador])))
+        else:
+            print('Jogador: {} com {} peça(s)'.format((jogador+1),(len(mao[jogador]))))
+        peg_monte = True
+        while peg_monte:
+            pecas_possiveis = posicoes_possiveis(mesa,mao[jogador])
+            if pecas_possiveis == []:
+                if monte != []:
+                    print('Não tem peças possíveis. PEGANDO DO MONTE!')
+                    mao[jogador].append(monte[0])
+                    del monte[0]
+                else:
+                    print('Não há peças no monte! PASSANDO A VEZ!')
+                    peg_monte = False
+            else:
+                escolha = ''
+                for num in pecas_possiveis:
+                    escolha += ',{}'.format(num+1)
+                if jogador == 0:
+                    joga_peca = int(input('Escolha qual peca jogar: {}'.format(escolha))) -1
+                else:
+                    joga_peca = randint(0,len(pecas_possiveis)-1)
                     
+                peg_monte = False
+                
+                mesa = adiciona_na_mesa(mao[jogador][joga_peca],mesa)
+                del mao[jogador][joga_peca]
+        vencedor = verifica_ganhador(mao)
+        if vencedor == -1:
+            jogador+=1        
+            if jogador==n_jogadores:
+                jogador =0
+        else:
+            jogo_fim = True
+            print('Venceu o jogador: {}'.format(jogador))
+    inicia = input('Quer iniciar um jogo? (sim/não)')
+print('Foi um prazer jogar com vc!')                    

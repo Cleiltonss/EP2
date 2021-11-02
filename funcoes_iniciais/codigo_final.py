@@ -67,10 +67,6 @@ while inicia != 'não':
                     print('Venceram os jogadores: {}'.format(vencedor))
                 else:
                     print('Venceu o jogador: {}'.format(vencedor))
-                
-                
-
-                
         
         
         else:                                                        #O jogador possui ao menos uma peça possivel de ser jogada    
@@ -93,15 +89,21 @@ while inicia != 'não':
             print('Colocou: {}'.format(mao[jogador][joga_peca]))
             del mao[jogador][joga_peca]                             #É informado a todos os jogadores qual peça foi jogada
             
+            vencedor = verifica_ganhador(mao)                           #Checa se há algum ganhador nessa rodada
+            if vencedor != -1:
+                jogo_fim = True
+                if jogador!=0:
+                    print('Venceu o jogador: {}'.format(jogador+1))
+                else:
+                    print('Parabéns! Você venceu o jogo!')
             
-            jogador+=1                                              #Passa a vez ao próximo jogador
-            if jogador == n_jogadores:
-                jogador = 0                                         #Garante que cada rodada vai ser cíclica 
+            
+            elif jogador == n_jogadores-1:                         #Como não há ganhador, passa a vez
+                jogador = 0
+            else:
+                jogador+=1                                         #Garante que cada rodada vai ser cíclica 
         
-        vencedor = verifica_ganhador(mao)                           #Checa se há algum ganhador nessa rodada
-        if vencedor != -1:
-            jogo_fim = True
-            print('Venceu o jogador: {}'.format(jogador+1))
+        
 
             
     inicia = input('Quer iniciar um jogo? (sim/não)')

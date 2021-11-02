@@ -117,13 +117,20 @@ while inicia not in 'não':
             del mao[jogador][joga_peca]                             #É informado a todos os jogadores qual peça foi jogada
             
             
-            jogador+=1                                              #Passa a vez ao próximo jogador
-            if jogador == n_jogadores:
-                jogador = 0                                         #Garante que cada rodada vai ser cíclica 
-        
-        vencedor = verifica_ganhador(mao)                           #Checa se há algum ganhador nessa rodada
-        if vencedor != -1:
-            jogo_fim = True
-            print(f'Venceu o jogador: {jogador + 1}')
+            vencedor = verifica_ganhador(mao)                           #Checa se há algum ganhador nessa rodada
+            if vencedor != -1:
+                jogo_fim = True
+                if jogador!=0:
+                    print('Venceu o jogador: {}'.format(jogador+1))
+                else:
+                    print('Parabéns! Você venceu o jogo!')
+            
+            
+            elif jogador == n_jogadores-1:                         #Como não há ganhador, passa a vez
+                jogador = 0
+            else:
+                jogador+=1                                         #Garante que cada rodada vai ser cíclica 
+    
+    
     inicia = input(f'\nQuer jogar novamente?\n{cores["verde"]}sim{cores["limpa"]} para continuar e {cores["vermelho"]}não{cores["limpa"]} para parar.')
 print(f'\nFoi um {cores["ciano"]}prazer{cores["limpa"]} jogar com você!\nAté a próxima!') 

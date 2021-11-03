@@ -171,7 +171,7 @@ while inicia not in 'não':
             if jogador == n_jogadores:
                 jogador = 0                                         #Garante que cada rodada vai ser cíclica 
         
-        vencedor = verifica_ganhador(mao)                           #Checa se há algum ganhador nessa rodada
+        vencedor = verifica_ganhador(mao)                           #Checa se há alum ganhador nessa rodada
         if vencedor != -1:
             jogo_fim = True
             print(f'Venceu o jogador: {cores["verde"]}{jogador + 1}{cores["limpa"]}')

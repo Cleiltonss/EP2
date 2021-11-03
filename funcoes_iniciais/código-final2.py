@@ -110,7 +110,7 @@ while inicia not in 'não':
             
             
             else:                                                   #O computador escolhe aleatoriamente uma das peças possiveis para jogar
-                joga_peca = randint(0, len(pecas_possiveis)-1)
+                joga_peca = pecas_possiveis[randint(0, len(pecas_possiveis)-1)]
                     
             mesa = adiciona_na_mesa(mao[jogador][joga_peca], mesa)   #A mesa agora recebe a peça que jogaram
             print(f'\nColocou: {mao[jogador][joga_peca]}\n')

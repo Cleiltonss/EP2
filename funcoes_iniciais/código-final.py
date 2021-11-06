@@ -48,45 +48,49 @@ while inicia not in 'não':
 
 
     #Início do Jogo
-    dic_jmm = inicia_jogo(n_jogadores, lista_pecas) #dicionario com jogador, monte e peças
-    jogador_inicial = randint(0, n_jogadores - 1) #define o indice do jogador inicial
-    jogador = jogador_inicial #jogador é uma variável que vai representar quem está jogando na rodada
-    jogo_fim = False #define que o jogo está rodando
-    joga_peca = 0 #cria a variavel da peça a ser jogada na mesa em cada rodada
-    pontos = [] #um dicionário com os pontos de cada jogador para classificação e caso dê empate
-    mao = dic_jmm['jogadores'] #retorna um dic com as mãos do jogadores da partida
-    mesa = dic_jmm['mesa'] #retorna uma lista vazia de inicio
-    monte = dic_jmm['monte'] #retorna uma lista com o monte de inicio da partida
+    dic_jmm = inicia_jogo(n_jogadores, lista_pecas)             #dicionario com jogador, monte e peças
+    jogador_inicial = randint(0, n_jogadores - 1)               #define o indice do jogador inicial
+    jogador = jogador_inicial                                   #jogador é uma variável que vai representar quem está jogando na rodada
+    jogo_fim = False                                            #define que o jogo está rodando
+    joga_peca = 0                                               #cria a variavel da peça a ser jogada na mesa em cada rodada
+    joga_ou_passa = 0
+    pontos = []                                                 #um dicionário com os pontos de cada jogador para classificação e caso dê empate
+    mao = dic_jmm['jogadores']                                  #retorna um dic com as mãos do jogadores da partida
+    mesa = dic_jmm['mesa']                                      #retorna uma lista vazia de inicio
+    monte = dic_jmm['monte']                                    #retorna uma lista com o monte de inicio da partida
 
 
-    while jogo_fim != True: #Se o jogo não tiver acabado
+    while jogo_fim != True:                                     #Se o jogo não tiver acabado
         
         #Vemos a mesa e quem está jogando primeiro
-        if len(mesa) > 0:
-            sleep(0.5)
-            print(f'MESA:\n\n{printa_colorido(mesa)} ')
-            sleep(0.5)
-        else:
-            sleep(0.5)
-            print(f'MESA:\n\n{mesa}')
-            sleep(0.5)
-        if jogador == 0:
-            sleep(0.5)
-            print(f'\nSua vez! Suas peças são:\n')
-            # for c in mao[jogador]:
-            #     sys.stdout.write(f'{c} ')
-            print(f'{printa_colorido(mao[jogador])}  ')
-            print('\n')
-            for c in range (0, len(mao[jogador])):
-                sys.stdout.write(f'  {cores["ciano"]}{c + 1}{cores["vermelho"]}ª{cores["limpa"]}{cores["limpa"]}   ')
-        else:
-            print(f'\nO Jogador {cores["verde"]}{jogador + 1}{cores["limpa"]} possui {cores["amarelo"]}{len(mao[jogador])}{cores["limpa"]} peça(s)!')
-        
+        if joga_ou_passa == 0:
+            if len(mesa) > 0:
+                sleep(0.5)
+                print(f'MESA:\n{printa_colorido(mesa)}\n ')
+                sleep(0.5)
+            else:
+                sleep(0.5)
+                print(f'MESA:\n{mesa}\n')
+                sleep(0.5)
+            if jogador == 0:
+                sleep(0.5)
+                print(f'\nSua vez! Suas peças são:\n')
+                # for c in mao[jogador]:
+                #     sys.stdout.write(f'{c} ')
+                print(f'{printa_colorido(mao[jogador])}  ')
+                print('\n')
+                for c in range (0, len(mao[jogador])):
+                    sys.stdout.write(f'  {cores["ciano"]}{c + 1}{cores["vermelho"]}ª{cores["limpa"]}{cores["limpa"]}   ')
+            else:
+                print(f'\nO Jogador {cores["verde"]}{jogador + 1}{cores["limpa"]} possui {cores["amarelo"]}{len(mao[jogador])}{cores["limpa"]} peça(s)!')
+            
         #Agora, cheacamos se o jogador tem peças que podem ser jogadas e qual vai ser adicionada na mesa
         pecas_possiveis = posicoes_possiveis(mesa, mao[jogador])
         
         if pecas_possiveis == []:
+            
             if monte != []:                                          #jogador começa a puxar do monte
+                joga_ou_passa = 1
                 sleep(1)
                 print(f'\nNão há peças possíveis. {cores["vermelho"]}PEGANDO DO MONTE!{cores["limpa"]}\n')
                 mao[jogador].append(monte[0])
@@ -94,6 +98,7 @@ while inicia not in 'não':
             else:                                                    #o monte acabou, a contagem de empate incrementa
                 sleep(1)
                 print(f'\nNão há peças no monte! {cores["vermelho"]}PASSANDO A VEZ!{cores["limpa"]}\n')
+                joga_ou_passa = 0
                 jogador += 1
                 empate += 1
             if empate == n_jogadores: #Quer dizer que todos os jogadores precisaram pegar do monte, mas ele está vazio
@@ -113,7 +118,8 @@ while inicia not in 'não':
         
         else:                                                        #O jogador possui ao menos uma peça possivel de ser jogada    
             empate = 0                                               #A contagem de empate deve ser resetada então
-            
+            joga_ou_passa = 0
+
             if jogador == 0:                                         #As açoes do jogador ZERO são representadas pelo jogador    
                 
                 escolha = ''
@@ -122,6 +128,10 @@ while inicia not in 'não':
                 escolha = escolha[1:]
                 sleep(0.5)
                 joga_peca = int(input(f'\n\nAs peças possíveis de escolha são: {escolha}\nEscolha a peça que você quer jogar: ')) -1 #retorna o indice da peça que ele quer jogar
+                if joga_peca not in pecas_possiveis:
+                    while joga_peca not in pecas_possiveis:
+                        print('Parece-me que você escolheu uma peça que não pode ser jogada!\nQue deselegante!\nEscolha de novo!')
+                        joga_peca = int(input(f'\n\nAs peças possíveis de escolha são: {escolha}\nEscolha a peça que você quer jogar: ')) -1
             
             
             else:                                                   #O computador escolhe aleatoriamente uma das peças possiveis para jogar

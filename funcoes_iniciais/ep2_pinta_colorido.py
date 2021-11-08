@@ -38,5 +38,3 @@ def printa_colorido(lista_pecas):
         peca_colorida = peca_colorida[:-1] + ']  '
         texto_com_cor+='{}'.format(peca_colorida)
     return texto_com_cor
-
-print(f'{printa_colorido([[2,1], [3, 2]])}')

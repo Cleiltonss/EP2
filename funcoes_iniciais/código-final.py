@@ -99,7 +99,10 @@ while inicia not in 'não':
                 sleep(1)
                 print(f'\nNão há peças no monte! {cores["vermelho"]}PASSANDO A VEZ!{cores["limpa"]}\n')
                 joga_ou_passa = 0
-                jogador += 1
+                if jogador == n_jogadores - 1:
+                    jogador = 0
+                else:
+                    jogador += 1
                 empate += 1
             if empate == n_jogadores: #Quer dizer que todos os jogadores precisaram pegar do monte, mas ele está vazio
                 jogo_fim = True     #Então, a partida acaba
